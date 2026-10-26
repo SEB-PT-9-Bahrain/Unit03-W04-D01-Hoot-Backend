@@ -27,5 +27,14 @@ router.get('/', verifyToken, async (req,res)=>{
     }
 })
 
+router.get('/:hootId', async (req,res)=>{
+    try{
+        const foundHoot = await Hoot.findById(req.params.hootId).populate('author')
+        res.json(foundHoot)
+    }catch(err){
+        console.log(err)
+    }
+})
+
 
 module.exports = router;
