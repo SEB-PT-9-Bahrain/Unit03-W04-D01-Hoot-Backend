@@ -3,6 +3,7 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const {authLimiter} = require('../middleware/rateLimiters')
 
 
 router.post("/sign-up", async (req, res) => {
@@ -43,7 +44,7 @@ router.post("/sign-up", async (req, res) => {
   }
 });
 
-router.post("/sign-in", async (req, res) => {
+router.post("/sign-in", authLimiter, async (req, res) => {
   try {
     const { username, password } = req.body;
 
