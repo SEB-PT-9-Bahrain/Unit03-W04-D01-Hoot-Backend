@@ -31,7 +31,9 @@ router.get("/", verifyToken, async (req, res) => {
 router.get("/:hootId", async (req, res) => {
   try {
     const foundHoot = await Hoot.findById(req.params.hootId).populate("author");
-    res.json(foundHoot);
+    const commentsForHoot = await Comment.find({hoot: req.params.hootId})
+    
+    res.json({hoot: foundHoot, comments: commentsForHoot});
   } catch (err) {
     console.log(err);
   }
@@ -81,6 +83,16 @@ router.delete('/:hootId', verifyToken, async (req,res)=>{
 
 router.post('/:hootId/comment', verifyToken, async (req,res)=>{
 
+    try{
+        const createdComment = await Comment.create({
+            text: req.body.text,
+            author: req.user._id,
+            hoot: req.params.hootId
+        })
+        res.status(201).json(createdComment)
+    }catch(err){
+        console.log(err)
+    }
 })
 
 
