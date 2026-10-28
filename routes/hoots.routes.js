@@ -69,7 +69,8 @@ router.delete('/:hootId', verifyToken, async (req,res)=>{
     const foundHoot = await Hoot.findById(req.params.hootId);
 
      if (foundHoot.author == req.user._id) {
-      const updatedHoot = await Hoot.findByIdAndDelete(req.params.hootId,);
+      const updatedHoot = await Hoot.findByIdAndDelete(req.params.hootId);
+      const deletedComments = await Comment.deleteMany({hoot:req.params.hootId})
       return res.json(updatedHoot);
     }
     else{
